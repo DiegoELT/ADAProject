@@ -1,0 +1,160 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\selectlanguage{spanish}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[noend]{algorithmic}
+
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solución]}
+  {\end{proof}}
+
+%pseudocodigo
+\newcommand{\TITLE}[1]{\item[#1]}
+\renewcommand{\algorithmiccomment}[1]{$/\!/$ \parbox[t]{4.5cm}{\raggedright #1}}
+% ugly hack for for/while
+\newbox\fixbox
+\renewcommand{\algorithmicdo}{\setbox\fixbox\hbox{\ {} }\hskip-\wd\fixbox}
+% end of hack
+%imitando para if
+\renewcommand{\algorithmicthen}{\setbox\fixbox\hbox{\ {} }\hskip-\wd\fixbox}
+\newcommand{\algcost}[2]{\strut\hfill\makebox[1.5cm][l]{#1}\makebox[4cm][l]{#2}}
+
+%piso techo 
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+ 
+ \newenvironment{ejercicio}[2][Ejercicio]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+
+\begin{document}
+
+\title{PROYECTO DE ADA}
+\date{}
+\maketitle
+
+\section*{Secuencias}
+
+\subsection*{Pregunta 1 (Voraz)}
+
+\subsubsection*{Algoritmo: Get-Blocks}
+
+\noindent Recibe: Un arreglos A de ceros y unos.
+
+\noindent Devuelve: Un arreglo X de bloques de unos. 
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{Get-Blocks}$(A)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \STATE i = 1
+    \algcost{$c_1$}{$1$}
+  \STATE j = 1
+    \algcost{$c_1$}{$1$}
+  \STATE p = A.size
+    \algcost{$c_2$}{$1$}
+  \WHILE{$i\leq p$
+    \algcost{$c_3$}{$1$}}
+  \STATE tmp = 0
+    \algcost{$c_1$}{$1$}
+    \WHILE{$A[i]\neq 1$ \AND $i\leq p$
+      \algcost{$c_4$}{$1$}}
+    \STATE i += 1
+      \algcost{$c_5$}{$1$}
+    \ENDWHILE
+    \WHILE{$A[i]\neq 0$ \AND $i\leq p$
+      \algcost{$c_4$}{$p$}}
+    \STATE i += 1
+      \algcost{$c_5$}{$p$}
+    \STATE tmp += 1
+      \algcost{$c_5$}{$p$}
+    \ENDWHILE
+  	\IF{tmp $\neq 0$ \algcost{$c_6$}{$1$}} 
+    \STATE X[j] = tmp
+      \algcost{$c_7$}{$1$}
+    \STATE j += 1
+      \algcost{$c_5$}{$1$}
+    \ENDIF 
+  \ENDWHILE
+  \STATE return X
+    \algcost{$c_8$}{$1$}
+\end{algorithmic} 
+
+\subsubsection*{Algoritmo: Min-Matching-Greedy}
+
+\noindent Recibe: Dos arreglos A y B de ceros y unos de tamaño p, con n bloques y m bloques respectivamente (los valores de n y m no son recibidos como entrada). 
+
+\noindent Devuelve: Un matching entre A y B, no necesariamente óptimo, y su peso.
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{Min-Matching-Greedy}$(A,B)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \STATE X = Get-Blocks(A,p)
+    \algcost{$p$}{$1$}
+  \STATE Y = Get-Blocks(B,p)
+    \algcost{$p$}{$1$}
+  \STATE Match = $\emptyset$
+    \algcost{$c_1$}{$1$}
+  \STATE $w = 0$
+    \algcost{$c_2$}{$1$}
+  \STATE $i = 1$
+    \algcost{$c_2$}{$1$}
+  \STATE $j = 1$
+    \algcost{$c_2$}{$1$}
+  \WHILE{$i\leq n$ \AND $j\leq m$
+    \algcost{$c_3$}{$1$}}
+    \IF{$X[i]==Y[j]$ \algcost{$c_4$}{$1$}} 
+    \STATE $w$ += 1
+      \algcost{$c_5$}{$0$}
+    \STATE Match = Match $\cup \ \{\{X[i],Y[i]\}\}$
+      \algcost{$c_6$}{$0$}
+    \ELSE
+      \IF{$X[i]>Y[j]$ \algcost{$c_4$}{$1$}}
+      \STATE division = $\emptyset$
+    	\algcost{$c_1$}{$1$} 
+      \WHILE{$X[i]>sum(division)$
+	    \algcost{$c_7$}{$n$}}
+	  \STATE division = division $\cup \ \{Y[j]\}$
+	    \algcost{$c_6$}{$n$}
+	  \STATE j += 1
+    	\algcost{$c_5$}{$n$}
+	  \ENDWHILE
+	  \STATE $w$ += $X[i]/sum(division)$
+	    \algcost{$c_8$}{$1$}
+      \STATE Match = Match $\cup \ \{division \cup X[i]\}$
+        \algcost{$c_6$}{$1$}
+      \ELSE
+      \STATE group = $\emptyset$
+    	\algcost{$c_1$}{$0$} 
+      \WHILE{$Y[j]>sum(group)$
+	    \algcost{$c_7$}{$0$}}
+	  \STATE group = group $\cup \ \{X[i]\}$
+	    \algcost{$c_6$}{$0$}
+	  \STATE i += 1
+    	\algcost{$c_5$}{$0$}
+	  \ENDWHILE
+	  \STATE $w$ += $sum(group)/Y[j]$
+	    \algcost{$c_8$}{$0$}
+      \STATE Match = Match $\cup \ \{group \cup Y[j]\}$
+        \algcost{$c_6$}{$0$}
+      \ENDIF
+    \ENDIF
+  \STATE i += 1
+    \algcost{$c_5$}{$1$}
+  \STATE j += 1
+    \algcost{$c_5$}{$1$}
+  \ENDWHILE
+  \STATE return $w$, Match
+    \algcost{$c_9$}{$1$}
+\end{algorithmic}
+
+\end{document}
