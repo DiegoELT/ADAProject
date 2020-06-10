@@ -54,24 +54,22 @@
 \noindent Devuelve: Un arreglo X de bloques de unos. 
 
 \begin{algorithmic}[1]
-  \TITLE{\textsc{Get-Blocks}$(A)$}
+  \TITLE{\textsc{Get-Blocks}$(A,p)$}
     \algcost{\textit{cost}}{\textit{times}}
   \STATE i = 1
     \algcost{$c_1$}{$1$}
   \STATE j = 1
     \algcost{$c_1$}{$1$}
-  \STATE p = A.size
-    \algcost{$c_2$}{$1$}
   \WHILE{$i\leq p$
     \algcost{$c_3$}{$1$}}
   \STATE tmp = 0
     \algcost{$c_1$}{$1$}
-    \WHILE{$A[i]\neq 1$ \AND $i\leq p$
+    \WHILE{$A[i]\neq 1$
       \algcost{$c_4$}{$1$}}
     \STATE i += 1
       \algcost{$c_5$}{$1$}
     \ENDWHILE
-    \WHILE{$A[i]\neq 0$ \AND $i\leq p$
+    \WHILE{$A[i]\neq 0$
       \algcost{$c_4$}{$p$}}
     \STATE i += 1
       \algcost{$c_5$}{$p$}
@@ -102,59 +100,38 @@
     \algcost{$p$}{$1$}
   \STATE Y = Get-Blocks(B,p)
     \algcost{$p$}{$1$}
-  \STATE Match = $\emptyset$
+  \STATE n = X.size
     \algcost{$c_1$}{$1$}
+  \STATE m = Y.size
+    \algcost{$c_1$}{$1$}  
+  \STATE Match = $\emptyset$
+    \algcost{$c_2$}{$1$}
   \STATE $w = 0$
-    \algcost{$c_2$}{$1$}
-  \STATE $i = 1$
-    \algcost{$c_2$}{$1$}
-  \STATE $j = 1$
-    \algcost{$c_2$}{$1$}
-  \WHILE{$i\leq n$ \AND $j\leq m$
-    \algcost{$c_3$}{$1$}}
-    \IF{$X[i]==Y[j]$ \algcost{$c_4$}{$1$}} 
-    \STATE $w$ += 1
-      \algcost{$c_5$}{$0$}
-    \STATE Match = Match $\cup \ \{\{X[i],Y[i]\}\}$
-      \algcost{$c_6$}{$0$}
-    \ELSE
-      \IF{$X[i]>Y[j]$ \algcost{$c_4$}{$1$}}
-      \STATE division = $\emptyset$
-    	\algcost{$c_1$}{$1$} 
-      \WHILE{$X[i]>sum(division)$
-	    \algcost{$c_7$}{$n$}}
-	  \STATE division = division $\cup \ \{Y[j]\}$
-	    \algcost{$c_6$}{$n$}
-	  \STATE j += 1
-    	\algcost{$c_5$}{$n$}
-	  \ENDWHILE
-	  \STATE $w$ += $X[i]/sum(division)$
-	    \algcost{$c_8$}{$1$}
-      \STATE Match = Match $\cup \ \{division \cup X[i]\}$
-        \algcost{$c_6$}{$1$}
-      \ELSE
-      \STATE group = $\emptyset$
-    	\algcost{$c_1$}{$0$} 
-      \WHILE{$Y[j]>sum(group)$
-	    \algcost{$c_7$}{$0$}}
-	  \STATE group = group $\cup \ \{X[i]\}$
-	    \algcost{$c_6$}{$0$}
-	  \STATE i += 1
-    	\algcost{$c_5$}{$0$}
-	  \ENDWHILE
-	  \STATE $w$ += $sum(group)/Y[j]$
-	    \algcost{$c_8$}{$0$}
-      \STATE Match = Match $\cup \ \{group \cup Y[j]\}$
-        \algcost{$c_6$}{$0$}
-      \ENDIF
-    \ENDIF
-  \STATE i += 1
+    \algcost{$c_3$}{$1$}
+  \FOR{$i=1$ TO $min(n,m)-1$}  
+  \STATE Match = Match $\cup \ \{\{i,i\}\}$
+    \algcost{$c_4$}{$1$}
+  \STATE $w$ += X[i]/Y[i]
     \algcost{$c_5$}{$1$}
-  \STATE j += 1
-    \algcost{$c_5$}{$1$}
-  \ENDWHILE
+  \ENDFOR  
+  \IF{$n<m$ \algcost{$c_6$}{$1$}} 
+    \FOR{$i=0$ TO $m-n$}  
+    \STATE Match = Match $\cup \ \{\{m+i,m\}\}$
+      \algcost{$c_4$}{$1$}
+    \STATE $w$ += X[m+i]/Y[m]
+      \algcost{$c_5$}{$1$}
+    \ENDFOR 
+  \ELSE
+    \FOR{$i=0$ TO $n-m$}  
+    \STATE Match = Match $\cup \ \{\{n,n+i\}\}$
+      \algcost{$c_4$}{$1$}
+    \STATE $w$ += X[n]/Y[n+i]
+      \algcost{$c_5$}{$1$}
+    \ENDFOR 
+  \ENDIF 
+  
   \STATE return $w$, Match
-    \algcost{$c_9$}{$1$}
+    \algcost{$c_7$}{$1$}
 \end{algorithmic}
 
 \end{document}
