@@ -271,7 +271,9 @@ $Y = \textsc{Get-Blocks}(B,p)$
 
 \subsection*{Pregunta 4 (Memoizado)}
 
-\noindent Los algoritmos para las funciones group y división permanecen igual.
+\noindent Los algoritmos para las funciones group y división permanecen igual. La diferencia con el algoritmo recursivo es que almacena los datos ya calculados en una matriz de tamaño $m\ *\ n$ para evitar llamadas que calculen datos que ya sabemos.\\
+\textbf{Recibe:} Dos arreglos de bits, X y Y con la cantidad de pesos que tienen i y j respectivamente.
+\textbf{Devuelve:} El matching de peso mínimo junto con su peso.
 
 \subsubsection*{Algoritmo: Min-Matching-Memoization}
 

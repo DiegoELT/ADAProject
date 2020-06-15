@@ -54,10 +54,30 @@ def minMatchingMemoization(X,Y,i,j):
 	minMatch[i][j][0] = MatchG
 	minMatch[i][j][1] = MinG
 	return MatchG, MinG
-	
 
-A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
-B = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
+
+if(len(sys.argv) > 0):
+	if(sys.argv[1] == '0'):
+		filename_cadena_a = str(input("Cadena A: "))
+		filename_cadena_b = str(input("Cadena B: "))
+
+		with open(filename_cadena_a) as a:
+			A = [int(char) for char in a.readline()]
+
+		with open(filename_cadena_b) as b:
+			B = [int(char) for char in b.readline()]
+
+	elif(sys.argv[1] == '1'):
+		A = [int(bit) for bit in str(input("Arreglo A: "))]
+		B = [int(bit) for bit in str(input("Arreglo B: "))]
+
+	else:
+		A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,0]
+		B = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
+else:
+	A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,0]
+	B = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
+
 X = getBlocks(A,len(A))
 Y = getBlocks(B,len(B))
 minMatch = [[[[],math.inf] for j in range(len(Y))] for i in range(len(X))]
