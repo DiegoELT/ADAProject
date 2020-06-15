@@ -134,4 +134,214 @@
     \algcost{$c_7$}{$1$}
 \end{algorithmic}
 
+\subsection*{Pregunta 2 (Recurrencia)}
+
+\noindent Asumimos que:\\
+$X = \textsc{Get-Blocks}(A,p)$ \\
+$Y = \textsc{Get-Blocks}(B,p)$ 
+
+\[
+OPT(i,j)=\left\{
+            \begin{array}{ll}
+              \frac{X_i}{Y_j} \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i=1 \ \ \wedge \ \ j=1 \\ \\
+              \frac{X_i}{\sum_{p=1}^{j}Y_p} \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i=1 \ \ \wedge \ \ j>1 \\ \\
+              \frac{\sum_{p=1}^{i}X_p}{Y_j} \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i>1 \ \ \wedge \ \ j=1 \\ \\
+              min(M_g(i,j), M_d(i,j)) \ \ \ \ \ \ \ \ \ \ \ \ \ \  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i>1 \ \ \wedge \ \ j>1 \\
+            \end{array}
+          \right.
+\]
+
+\noindent
+$M_g(i,j) = min_{k=1}^{i-1}\{\frac{\sum_{p=k+1}^{i}X_p}{Y_j} + OPT(k,j-1)\}$ \\ \\
+$M_d(i,j) = min_{k=1}^{j-1}\{\frac{X_i}{\sum_{p=k+1}^{j}Y_p} + OPT(i-1,k)\}$
+
+\subsection*{Pregunta 3 (Recursivo)}
+
+\noindent Asumimos que:\\
+$X = \textsc{Get-Blocks}(A,p)$ \\
+$Y = \textsc{Get-Blocks}(B,p)$ 
+
+\subsubsection*{Algoritmo: Group}
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{Group}$(X,Y,i,j)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \STATE Min = $\infty$
+    \algcost{$.$}{$.$}
+  \FOR{$k=1$ TO $i-1$ \algcost{$.$}{$.$}}  
+    \STATE accum = 0
+      \algcost{$.$}{$.$}
+    \FOR{$p=k+1$ TO $i$ \algcost{$.$}{$.$}}  
+      \STATE accum += $X[p]$
+        \algcost{$.$}{$.$}
+    \ENDFOR  
+    \STATE accum /= $Y[j]$
+      \algcost{$.$}{$.$}
+    \STATE match, pmin = \textsc{Min-Matching-Recursive}$(X,Y,k,j-1)$ \\
+      \algcost{$.$}{$.$}
+    \IF{Min$>$accum+pmin \algcost{$.$}{$.$}} 
+      \STATE Min = accum + pmin
+        \algcost{$.$}{$.$}
+      \STATE Match = match
+        \algcost{$.$}{$.$}
+    \ENDIF 
+  \ENDFOR  
+  \RETURN Match$\ \cup \ \{[i,j]\},$ Min
+    \algcost{$.$}{$.$}
+\end{algorithmic}
+
+\subsubsection*{Algoritmo: Division}
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{Division}$(X,Y,i,j)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \STATE Min = $\infty$
+    \algcost{$.$}{$.$}
+  \FOR{$k=1$ TO $j-1$ \algcost{$.$}{$.$}}  
+    \STATE accum = 0
+      \algcost{$.$}{$.$}
+    \FOR{$p=k+1$ TO $j$ \algcost{$.$}{$.$}}  
+      \STATE accum += $Y[p]$
+        \algcost{$.$}{$.$}
+    \ENDFOR  
+    \STATE accum = $X[i]/$accum
+      \algcost{$.$}{$.$}
+    \STATE match, pmin = \textsc{Min-Matching-Recursive}$(X,Y,i-1,k)$ \\
+      \algcost{$.$}{$.$}
+    \IF{Min$>$accum+pmin \algcost{$.$}{$.$}} 
+      \STATE Min = accum + pmin
+        \algcost{$.$}{$.$}
+      \STATE Match = match
+        \algcost{$.$}{$.$}
+    \ENDIF 
+  \ENDFOR
+  \RETURN Match$\ \cup \ \{[i,j]\},$ Min
+    \algcost{$.$}{$.$}
+\end{algorithmic}
+
+\subsubsection*{Algoritmo: Min-Matching-Recursive}
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{Min-Matching-Recursive}$(X,Y,i,j)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \IF{$i==1$ \AND $j==1$ \algcost{$.$}{$.$}} 
+    \RETURN $\{[i,j]\}, \ \frac{X[i]}{Y[i]}$
+      \algcost{$.$}{$.$}
+  \ENDIF 
+  \IF{$i==1$ \AND $j>1$ \algcost{$.$}{$.$}} 
+    \STATE match = \{\}
+      \algcost{$.$}{$.$}
+    \STATE accumY = 0
+      \algcost{$.$}{$.$}
+  	\FOR{$p=1$ TO $j$ \algcost{$.$}{$.$}}  
+      \STATE accumY += Y[p]
+        \algcost{$.$}{$.$}
+      \STATE Match = Match$\ \cup \ \{[i,p]\},$ 
+        \algcost{$.$}{$.$}
+    \ENDFOR 
+    \RETURN Match$, \ \frac{X[i]}{accumY}$
+      \algcost{$.$}{$.$}
+  \ENDIF 
+  \IF{$i>1$ \AND $j==1$ \algcost{$.$}{$.$}} 
+    \STATE match = \{\}
+      \algcost{$.$}{$.$}
+    \STATE accumX = 0
+      \algcost{$.$}{$.$}
+  	\FOR{$p=1$ TO $i$ \algcost{$.$}{$.$}}  
+      \STATE accumX += X[p]
+        \algcost{$.$}{$.$}
+      \STATE Match = Match$\ \cup \ \{[p,j]\},$ 
+        \algcost{$.$}{$.$}
+    \ENDFOR 
+    \RETURN $Match, \ \frac{accumX}{Y[j]}$
+      \algcost{$.$}{$.$}
+  \ENDIF 
+  \STATE MatchG, MinG = \textsc{Group}$(X,Y,i,j)$
+    \algcost{$.$}{$.$}
+  \STATE MatchD, MinD = \textsc{Division}$(X,Y,i,j)$
+    \algcost{$.$}{$.$}  
+  \IF{MinG$>$MinD \algcost{$.$}{$.$}} 
+    \RETURN MatchD, MinD
+      \algcost{$.$}{$.$}
+  \ENDIF  
+  \RETURN MatchG, MinG
+    \algcost{$.$}{$.$}
+
+\end{algorithmic}
+
+\subsection*{Pregunta 4 (Memoizado)}
+
+\noindent Los algoritmos para las funciones group y división permanecen igual.
+
+\subsubsection*{Algoritmo: Min-Matching-Memoization}
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{Min-Matching-Memoization}$(X,Y,i,j)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \IF{$minMatch[i][j][2]!=\infty$ \algcost{$.$}{$.$}} 
+    \RETURN $minMatch[i][j][1], \ minMatch[i][j][2]$
+      \algcost{$.$}{$.$}
+  \ENDIF 
+  \IF{$i==1$ \AND $j==1$ \algcost{$.$}{$.$}} 
+    \STATE $minMatch[i][j][1] = [(i,j)]$
+      \algcost{$.$}{$.$}
+    \STATE $minMatch[i][j][2] = \frac{X[i]}{Y[j]}$
+      \algcost{$.$}{$.$}
+    \RETURN $minMatch[i][j][1], \ minMatch[i][j][2]$
+      \algcost{$.$}{$.$}
+  \ENDIF 
+  \IF{$i==1$ \AND $j>1$ \algcost{$.$}{$.$}} 
+    \STATE match = \{\}
+      \algcost{$.$}{$.$}
+    \STATE accumY = 0
+      \algcost{$.$}{$.$}
+  	\FOR{$p=1$ TO $j$ \algcost{$.$}{$.$}}  
+      \STATE accumY += Y[p]
+        \algcost{$.$}{$.$}
+      \STATE Match = Match$\ \cup \ \{[i,p]\},$ 
+        \algcost{$.$}{$.$}
+    \ENDFOR 
+    \STATE $minMatch[i][j][1] = Match$
+      \algcost{$.$}{$.$}
+    \STATE $minMatch[i][j][2] = \frac{X[i]}{accumY}$
+      \algcost{$.$}{$.$}
+    \RETURN $minMatch[i][j][1], \ minMatch[i][j][2]$
+      \algcost{$.$}{$.$}
+  \ENDIF 
+  \IF{$i>1$ \AND $j==1$ \algcost{$.$}{$.$}} 
+    \STATE match = \{\}
+      \algcost{$.$}{$.$}
+    \STATE accumX = 0
+      \algcost{$.$}{$.$}
+  	\FOR{$p=1$ TO $i$ \algcost{$.$}{$.$}}  
+      \STATE accumX += X[p]
+        \algcost{$.$}{$.$}
+      \STATE Match = Match$\ \cup \ \{[p,j]\},$ 
+        \algcost{$.$}{$.$}
+    \ENDFOR 
+    \STATE $minMatch[i][j][1] = Match$
+      \algcost{$.$}{$.$}
+    \STATE $minMatch[i][j][2] = \frac{accumX}{Y[j]}$
+      \algcost{$.$}{$.$}
+    \RETURN $minMatch[i][j][1], \ minMatch[i][j][2]$
+      \algcost{$.$}{$.$}
+  \ENDIF 
+  \STATE MatchG, MinG = \textsc{Group}$(X,Y,i,j)$
+    \algcost{$.$}{$.$}
+  \STATE MatchD, MinD = \textsc{Division}$(X,Y,i,j)$
+    \algcost{$.$}{$.$}  
+  \IF{MinG$>$MinD \algcost{$.$}{$.$}} 
+    \RETURN MatchD, MinD
+      \algcost{$.$}{$.$}
+  \ENDIF  
+  \RETURN MatchG, MinG
+    \algcost{$.$}{$.$}
+\end{algorithmic}
+
+\subsection*{Pregunta 5 (Programación Dinámica)}
+
+
+
+
+
 \end{document}
