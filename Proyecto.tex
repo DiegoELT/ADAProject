@@ -280,62 +280,62 @@ $Y = \textsc{Get-Blocks}(B,p)$
     \algcost{\textit{cost}}{\textit{times}}
   \IF{$minMatch[i][j][2]!=\infty$ \algcost{$.$}{$.$}} 
     \RETURN $minMatch[i][j][1], \ minMatch[i][j][2]$
-      \algcost{$.$}{$.$}
+      \algcost{$c_1$}{$1$}
   \ENDIF 
   \IF{$i==1$ \AND $j==1$ \algcost{$.$}{$.$}} 
     \STATE $minMatch[i][j][1] = [(i,j)]$
-      \algcost{$.$}{$.$}
+      \algcost{$c_2$}{$1$}
     \STATE $minMatch[i][j][2] = \frac{X[i]}{Y[j]}$
-      \algcost{$.$}{$.$}
+      \algcost{$c_3$}{$1$}
     \RETURN $minMatch[i][j][1], \ minMatch[i][j][2]$
-      \algcost{$.$}{$.$}
+      \algcost{$c_4$}{$1$}
   \ENDIF 
   \IF{$i==1$ \AND $j>1$ \algcost{$.$}{$.$}} 
     \STATE match = \{\}
-      \algcost{$.$}{$.$}
+      \algcost{$c_5$}{$1$}
     \STATE accumY = 0
-      \algcost{$.$}{$.$}
-  	\FOR{$p=1$ TO $j$ \algcost{$.$}{$.$}}  
+      \algcost{$c_6$}{$1$}
+  	\FOR{$p=1$ TO $j$ \algcost{$c_7$}{$j$}}  
       \STATE accumY += Y[p]
-        \algcost{$.$}{$.$}
+        \algcost{$c_8$}{$1$}
       \STATE Match = Match$\ \cup \ \{[i,p]\},$ 
-        \algcost{$.$}{$.$}
+        \algcost{$c_9$}{$1$}
     \ENDFOR 
     \STATE $minMatch[i][j][1] = Match$
-      \algcost{$.$}{$.$}
+      \algcost{$c_{10}$}{$1$}
     \STATE $minMatch[i][j][2] = \frac{X[i]}{accumY}$
-      \algcost{$.$}{$.$}
+      \algcost{$c_{11}$}{$1$}
     \RETURN $minMatch[i][j][1], \ minMatch[i][j][2]$
-      \algcost{$.$}{$.$}
+      \algcost{$c_{12}$}{$1$}
   \ENDIF 
   \IF{$i>1$ \AND $j==1$ \algcost{$.$}{$.$}} 
     \STATE match = \{\}
-      \algcost{$.$}{$.$}
+      \algcost{$c_{13}$}{$1$}
     \STATE accumX = 0
-      \algcost{$.$}{$.$}
-  	\FOR{$p=1$ TO $i$ \algcost{$.$}{$.$}}  
+      \algcost{$c_{14}$}{$1$}
+  	\FOR{$p=1$ TO $i$ \algcost{$c_{15}$}{$i$}}  
       \STATE accumX += X[p]
-        \algcost{$.$}{$.$}
+        \algcost{$c_{16}$}{$1$}
       \STATE Match = Match$\ \cup \ \{[p,j]\},$ 
-        \algcost{$.$}{$.$}
+        \algcost{$c_{17}$}{$1$}
     \ENDFOR 
     \STATE $minMatch[i][j][1] = Match$
-      \algcost{$.$}{$.$}
+      \algcost{$c_{18}$}{$1$}
     \STATE $minMatch[i][j][2] = \frac{accumX}{Y[j]}$
-      \algcost{$.$}{$.$}
+      \algcost{$c_{19}$}{$1$}
     \RETURN $minMatch[i][j][1], \ minMatch[i][j][2]$
-      \algcost{$.$}{$.$}
+      \algcost{$c_{20}$}{$1$}
   \ENDIF 
   \STATE MatchG, MinG = \textsc{Group}$(X,Y,i,j)$
-    \algcost{$.$}{$.$}
+    \algcost{$i*j$}{$1$}
   \STATE MatchD, MinD = \textsc{Division}$(X,Y,i,j)$
-    \algcost{$.$}{$.$}  
+    \algcost{$i*j$}{$1$}  
   \IF{MinG$>$MinD \algcost{$.$}{$.$}} 
     \RETURN MatchD, MinD
-      \algcost{$.$}{$.$}
+      \algcost{$c_{21}$}{$1$}
   \ENDIF  
   \RETURN MatchG, MinG
-    \algcost{$.$}{$.$}
+    \algcost{$c_{22}$}{$1$}
 \end{algorithmic}
 
 \subsection*{Pregunta 5 (Programación Dinámica)}
