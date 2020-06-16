@@ -18,10 +18,10 @@ def minMatchingGreedy(A, B):
         for i in range(-1,m-n):
             Match.append((n-1,n+i))
             w += X[n-1]/Y[n+i]
-    return w, Match
+    return Match, w
 
-A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
+'''A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
 B = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
-w,M = minMatchingGreedy(A,B)
+M,  = minMatchingGreedy(A,B)
 print(w)
-print(M)
+print(M)'''

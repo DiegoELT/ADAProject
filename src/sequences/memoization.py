@@ -56,7 +56,7 @@ def minMatchingMemoization(X,Y,i,j):
 	return MatchG, MinG
 
 
-if(len(sys.argv) > 0):
+'''if(len(sys.argv) > 0):
 	if(sys.argv[1] == '0'):
 		filename_cadena_a = str(input("Cadena A: "))
 		filename_cadena_b = str(input("Cadena B: "))
@@ -88,3 +88,4 @@ M, w = minMatchingMemoization(X,Y,len(X)-1,len(Y)-1)
 print(time.time()-start_time)
 print(w)
 print(sorted(M))
+'''

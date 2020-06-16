@@ -42,7 +42,7 @@ def minMatchingRecursive(X,Y,i,j):
 	return MatchG, MinG
 	
 
-A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
+'''A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
 B = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
 X = getBlocks(A,len(A))
 Y = getBlocks(B,len(B))
@@ -52,4 +52,4 @@ start_time = time.time()
 M, w = minMatchingRecursive(X,Y,len(X)-1,len(Y)-1)
 print(time.time()-start_time)
 print(w)
-print(sorted(M))
+print(sorted(M))'''
