@@ -20,10 +20,10 @@ def division(X,Y,i,j):
 	Min = math.inf
 	Match = []
 	for k in range(j):
-		tmatch = [(i,p) for p in range(k+1,j+1)]
 		accum = X[i]/sum(Y[k+1:j+1])
 		match, pmin = minMatchingMemoization(X,Y,i-1,k)
 		if(Min > accum+pmin):
+			tmatch = [(i,p) for p in range(k+1,j+1)]
 			Min = accum+pmin
 			Match = tmatch+match
 	return Match, Min
@@ -55,7 +55,10 @@ def minMatchingMemoization(X,Y,i,j):
 	minMatch[i][j][1] = MinG
 	return minMatch[i][j][0], minMatch[i][j][1]
 
-
+def minMatchingM(X,Y):
+	global minMatch
+	minMatch = [[[[],math.inf] for s in range(len(Y))] for l in range(len(X))]
+	return minMatchingMemoization(X,Y,len(X)-1,len(Y)-1)
 '''if(len(sys.argv) > 0):
 	if(sys.argv[1] == '0'):
 		filename_cadena_a = str(input("Cadena A: "))

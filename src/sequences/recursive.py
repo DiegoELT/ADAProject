@@ -6,10 +6,10 @@ def group(X,Y,i,j):
 	Min = math.inf
 	Match = []
 	for k in range(i):
-		tmatch = [(p,j) for p in range(k+1,i+1)]
 		accum = sum(X[k+1:i+1])/Y[j]
 		match, pmin = minMatchingRecursive(X,Y,k,j-1)
 		if(Min > accum+pmin):
+			tmatch = [(p,j) for p in range(k+1,i+1)]
 			Min = accum+pmin
 			Match = tmatch+match
 	return Match, Min
@@ -41,7 +41,8 @@ def minMatchingRecursive(X,Y,i,j):
 		return MatchD, MinD
 	return MatchG, MinG
 	
-
+def minMatchingR(X,Y):
+	return minMatchingRecursive(X,Y,len(X)-1,len(Y)-1)
 '''A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
 B = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
 X = getBlocks(A,len(A))

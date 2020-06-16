@@ -1,8 +1,6 @@
 from blocks import *
 
-def minMatchingGreedy(A, B):
-    X = getBlocks(A, len(A))
-    Y = getBlocks(B, len(B))
+def minMatchingGreedy(X, Y):
     n = len(X)
     m = len(Y)
     Match = []
