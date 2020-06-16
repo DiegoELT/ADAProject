@@ -67,10 +67,10 @@
     \WHILE{$A[i]\neq 1$
       \algcost{$c_4$}{$1$}}
     \STATE i += 1
-      \algcost{$c_5$}{$1$}
+      \algcost{$c_5$}{$0$}
     \ENDWHILE
     \WHILE{$A[i]\neq 0$
-      \algcost{$c_4$}{$p$}}
+      \algcost{$c_4$}{$p+1$}}
     \STATE i += 1
       \algcost{$c_5$}{$p$}
     \STATE tmp += 1
@@ -87,6 +87,19 @@
     \algcost{$c_8$}{$1$}
 \end{algorithmic} 
 
+\subsubsection*{Tiempo de ejecución: Get-Blocks}
+
+\noindent Para T(n) el tiempo de ejecución con un array de tamaño p como entrada, tenemos que
+\begin{eqnarray*}
+T(n)&=&c_1+c_1+c_3+c_1+c_4+c_4\cdot (p+1)+c_5\cdot p+c_5\cdot p+c_6+c_7+c_5+c_8 \\
+T(n)&=&c_4\cdot p+2c_5\cdot p+3c_1+c_3+2c_4+c_5+c_6+c_7+c_8 
+\end{eqnarray*}
+
+\noindent Si $a=c_4+2c_5$ y $b=3c_1+c_3+2c_4+c_5+c_6+c_7+c_8$, entonces
+$$T(n)=ap+b$$
+
+\noindent \textbf{Nota: } Para el análisis de los algoritmos propuestos en los siguientes apartados no se tomará en cuenta el tiempo de generar los bloques en los array de entrada.
+
 \subsubsection*{Algoritmo: Min-Matching-Greedy}
 
 \noindent Recibe: Dos arreglos A y B de ceros y unos de tamaño p, con n bloques y m bloques respectivamente (los valores de n y m no son recibidos como entrada). 
@@ -97,42 +110,79 @@
   \TITLE{\textsc{Min-Matching-Greedy}$(A,B)$}
     \algcost{\textit{cost}}{\textit{times}}
   \STATE X = Get-Blocks(A,p)
-    \algcost{$p$}{$1$}
+    \algcost{$.$}{$.$}
   \STATE Y = Get-Blocks(B,p)
-    \algcost{$p$}{$1$}
+    \algcost{$.$}{$.$}
   \STATE n = X.size
     \algcost{$c_1$}{$1$}
   \STATE m = Y.size
-    \algcost{$c_1$}{$1$}  
+    \algcost{$c_2$}{$1$}  
   \STATE Match = $\emptyset$
-    \algcost{$c_2$}{$1$}
-  \STATE $w = 0$
     \algcost{$c_3$}{$1$}
-  \FOR{$i=1$ TO $min(n,m)-1$}  
-  \STATE Match = Match $\cup \ \{\{i,i\}\}$
+  \STATE $w = 0$
     \algcost{$c_4$}{$1$}
+  \FOR{$i=1$ TO $min(n,m)-1$
+    \algcost{$c_5$}{$m$}}  
+  \STATE Match = Match $\cup \ \{\{i,i\}\}$
+    \algcost{$c_6$}{$m-1$}
   \STATE $w$ += X[i]/Y[i]
-    \algcost{$c_5$}{$1$}
+    \algcost{$c_7$}{$m-1$}
   \ENDFOR  
-  \IF{$n<m$ \algcost{$c_6$}{$1$}} 
-    \FOR{$i=0$ TO $m-n$}  
+  \IF{$n>m$ \algcost{$c_8$}{$1$}} 
+    \FOR{$i=0$ TO $n-m$
+    \algcost{$c_5$}{$n-m+1$}}  
     \STATE Match = Match $\cup \ \{\{m+i,m\}\}$
-      \algcost{$c_4$}{$1$}
+      \algcost{$c_6$}{$n-m$}
     \STATE $w$ += X[m+i]/Y[m]
-      \algcost{$c_5$}{$1$}
+      \algcost{$c_7$}{$n-m$}
     \ENDFOR 
   \ELSE
-    \FOR{$i=0$ TO $n-m$}  
+    \FOR{$i=0$ TO $n-m$
+    \algcost{$c_5$}{$0$}}  
     \STATE Match = Match $\cup \ \{\{n,n+i\}\}$
-      \algcost{$c_4$}{$1$}
+      \algcost{$c_6$}{$0$}
     \STATE $w$ += X[n]/Y[n+i]
-      \algcost{$c_5$}{$1$}
+      \algcost{$c_7$}{$0$}
     \ENDFOR 
   \ENDIF 
   
   \STATE return $w$, Match
-    \algcost{$c_7$}{$1$}
+    \algcost{$c_9$}{$1$}
 \end{algorithmic}
+
+\subsubsection*{Tiempo de ejecución: Min-Matching-Greedy}
+
+\noindent Para T(n,m) el tiempo de ejecución con un array de tamaño p como entrada, tenemos que
+\begin{eqnarray*}
+T(n,m)&=&c_1+c_2+c_3+c_4+c_5\cdot m+c_6\cdot (m-1)+c_7\cdot (m-1)+c_8+c_5\cdot (n-m+1)+\\
+& &c_6\cdot (n-m)+c_7\cdot (n-m)+c_9 \\
+T(n,m)&=&c_5\cdot m+c_6\cdot m+c_7\cdot m-c_5\cdot m-c_6\cdot m-c_7\cdot m+c_5\cdot n+c_6\cdot n+c_7\cdot n+c_1 \\
+& &+c_2+c_3+c_5-c_6-c_7+c_8+c_9 
+\end{eqnarray*}
+
+\noindent Si $a=c_5+c_6+c_7-c_5-c_6-c_7=0$, $b=c_5+c_6+c_7$ y $c=c_1+c_2+c_3+c_5-c_6-c_7+c_8+c_9$, entonces si $n>m$
+$$T(n,m)=bn+c$$
+Y si $m>n$, tenemos que
+$$T(n,m)=am+c$$
+Entonces, podemos generalizarlo como
+$$T(n,m)=max(am,bn)+c$$
+
+
+\noindent \textbf{Prueba que $T(n) = O(max(n,m))$} \\
+
+\noindent Note que para $n_0\geq max(a,b)+1$, tenemos que 
+\begin{eqnarray*}
+max(am,bn)+c &\leq& max(max(a,b)\cdot m, max(a,b)\cdot n)+c \\
+&\leq& max(a,b)\cdot max(m,n)+c \\
+&\leq& (max(a,b)+1)\cdot max(m,n) \\
+&\leq& n_0\cdot max(m,n)
+\end{eqnarray*}
+
+\noindent Y como la función $max$ es creciente, tenemos que
+\begin{eqnarray*}
+0\leq max(am,bn)\leq n_0\cdot max(m,n)
+\end{eqnarray*}
+\noindent Entonces por definición, concluimos que $T(n) = O(max(n,m))$
 
 \subsection*{Pregunta 2 (Recurrencia)}
 
@@ -271,9 +321,7 @@ $Y = \textsc{Get-Blocks}(B,p)$
 
 \subsection*{Pregunta 4 (Memoizado)}
 
-\noindent Los algoritmos para las funciones group y división permanecen igual. La diferencia con el algoritmo recursivo es que almacena los datos ya calculados en una matriz de tamaño $m\ *\ n$ para evitar llamadas que calculen datos que ya sabemos.\\
-\textbf{Recibe:} Dos arreglos de bits, X y Y con la cantidad de pesos que tienen i y j respectivamente.
-\textbf{Devuelve:} El matching de peso mínimo junto con su peso.
+\noindent Los algoritmos para las funciones group y división permanecen igual.
 
 \subsubsection*{Algoritmo: Min-Matching-Memoization}
 
