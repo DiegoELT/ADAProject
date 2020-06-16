@@ -15,8 +15,8 @@
   {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solución]}
   {\end{proof}}
 
-%pseudocodigo
 \newcommand{\TITLE}[1]{\item[#1]}
+
 \renewcommand{\algorithmiccomment}[1]{$/\!/$ \parbox[t]{4.5cm}{\raggedright #1}}
 % ugly hack for for/while
 \newbox\fixbox
@@ -37,10 +37,11 @@
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 
 
-\begin{document}
+\title{Proyecto de ADA - Primer Avance}
+\author{Alejandro Goicochea \and Diego Linares \and Ariana Villegas}
+\date{16 de Junio del 2020}
 
-\title{PROYECTO DE ADA}
-\date{}
+\begin{document}
 \maketitle
 
 \section*{Secuencias}
@@ -217,11 +218,11 @@ $Y = \textsc{Get-Blocks}(B,p)$
   \TITLE{\textsc{Group}$(X,Y,i,j)$}
     \algcost{\textit{cost}}{\textit{times}}
   \STATE Min = $\infty$
-    \algcost{$.$}{$.$}
-  \FOR{$k=1$ TO $i-1$ \algcost{$.$}{$.$}}  
+    \algcost{$c_1$}{$1$}
+  \FOR{$k=1$ TO $i-1$ \algcost{$c_2$}{$i$}}  
     \STATE accum = 0
-      \algcost{$.$}{$.$}
-    \FOR{$p=k+1$ TO $i$ \algcost{$.$}{$.$}}  
+      \algcost{$c_3$}{$i-1$}
+    \FOR{$p=k+1$ TO $i$ \algcost{$c_4$}{$\sum_{k=1}^i i-k-1$}}  
       \STATE accum += $X[p]$
         \algcost{$.$}{$.$}
     \ENDFOR  
@@ -237,7 +238,7 @@ $Y = \textsc{Get-Blocks}(B,p)$
     \ENDIF 
   \ENDFOR  
   \RETURN Match$\ \cup \ \{[i,j]\},$ Min
-    \algcost{$.$}{$.$}
+    \algcost{$c_1$}{$1$}
 \end{algorithmic}
 
 \subsubsection*{Algoritmo: Division}
@@ -246,8 +247,8 @@ $Y = \textsc{Get-Blocks}(B,p)$
   \TITLE{\textsc{Division}$(X,Y,i,j)$}
     \algcost{\textit{cost}}{\textit{times}}
   \STATE Min = $\infty$
-    \algcost{$.$}{$.$}
-  \FOR{$k=1$ TO $j-1$ \algcost{$.$}{$.$}}  
+    \algcost{$c_1$}{$1$}
+  \FOR{$k=1$ TO $j-1$ \algcost{$i$}{$.$}}  
     \STATE accum = 0
       \algcost{$.$}{$.$}
     \FOR{$p=k+1$ TO $j$ \algcost{$.$}{$.$}}  
@@ -274,15 +275,15 @@ $Y = \textsc{Get-Blocks}(B,p)$
 \begin{algorithmic}[1]
   \TITLE{\textsc{Min-Matching-Recursive}$(X,Y,i,j)$}
     \algcost{\textit{cost}}{\textit{times}}
-  \IF{$i==1$ \AND $j==1$ \algcost{$.$}{$.$}} 
+  \IF{$i==1$ \AND $j==1$ \algcost{$c_1$}{$1$}} 
     \RETURN $\{[i,j]\}, \ \frac{X[i]}{Y[i]}$
-      \algcost{$.$}{$.$}
+      \algcost{$c_2$}{$1$}
   \ENDIF 
-  \IF{$i==1$ \AND $j>1$ \algcost{$.$}{$.$}} 
+  \IF{$i==1$ \AND $j>1$ \algcost{$c_3$}{$1$}} 
     \STATE match = \{\}
-      \algcost{$.$}{$.$}
+      \algcost{$c_4$}{$1$}
     \STATE accumY = 0
-      \algcost{$.$}{$.$}
+      \algcost{$c_5$}{$1$}
   	\FOR{$p=1$ TO $j$ \algcost{$.$}{$.$}}  
       \STATE accumY += Y[p]
         \algcost{$.$}{$.$}
