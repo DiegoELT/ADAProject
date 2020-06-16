@@ -50,10 +50,10 @@ def minMatchingMemoization(X,Y,i,j):
 	if(MinG > MinD):
 		minMatch[i][j][0] = MatchD
 		minMatch[i][j][1] = MinD
-		return MatchD, MinD
+		return minMatch[i][j][0], minMatch[i][j][1]
 	minMatch[i][j][0] = MatchG
 	minMatch[i][j][1] = MinG
-	return MatchG, MinG
+	return minMatch[i][j][0], minMatch[i][j][1]
 
 
 if(len(sys.argv) > 0):
@@ -85,6 +85,6 @@ print(X)
 print(Y)
 start_time = time.time()
 M, w = minMatchingMemoization(X,Y,len(X)-1,len(Y)-1)
-print(time.time()-start_time)
+print("Tiempo de ejecucion:",time.time()-start_time)
 print(w)
 print(sorted(M))
