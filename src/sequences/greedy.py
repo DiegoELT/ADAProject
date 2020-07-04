@@ -18,8 +18,10 @@ def minMatchingGreedy(X, Y):
             w += X[n-1]/Y[n+i]
     return Match, w
 
-'''A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
+A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
 B = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
-M,  = minMatchingGreedy(A,B)
+aB = getBlocks(A,len(A))
+bB = getBlocks(B,len(B))
+M, w  = minMatchingGreedy(aB,bB)
 print(w)
-print(M)'''
+print(M)
