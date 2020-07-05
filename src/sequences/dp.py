@@ -2,11 +2,11 @@ from blocks import *
 import sys, math
 import time
 
-minMatch = []
-accumX = []
-accumY = []
-
 def minMatchingDP(X,Y):
+	accumX = []
+	accumY = []
+	minMatch = [[[[],math.inf] for j in range(len(Y))] for i in range(len(X))]
+
 	n = len(X)
 	m = len(Y)
 	accumX.append(X[0])
@@ -45,15 +45,14 @@ def minMatchingDP(X,Y):
 	return minMatch[n-1][m-1][0], minMatch[n-1][m-1][1]
 	
 
-A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,0]
+'''A = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,0]
 B = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
-X = getBlocks(A,len(A))
-Y = getBlocks(B,len(B))
+X = [24, 2, 8, 26, 13, 21]
+Y = [31, 7, 41, 14]
 print(X)
 print(Y)
-minMatch = [[[[],math.inf] for j in range(len(Y))] for i in range(len(X))]
 start_time = time.time()
 M, w = minMatchingDP(X,Y)
 print("Tiempo de ejecucion:",time.time()-start_time)
 print(w)
-print(sorted(M))
+print(sorted(M))'''

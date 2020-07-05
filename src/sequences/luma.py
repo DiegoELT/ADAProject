@@ -1,11 +1,9 @@
 import imageio
 
-
-
-def luma():
-    imgName = input("Image name: ")
-    umbral = float(input("Umbral: "))
-    type = input("CCIR 601 = c, BT. 709 = b, SMPTE 240M = s: " )
+def luma(imgName):
+    #imgName = input("Image name: ")
+    umbral = 100 #float(input("Umbral: "))
+    type = 'c' #input("CCIR 601 = c, BT. 709 = b, SMPTE 240M = s: " )
 
     CCIR = (0.299, 0.587, 0.114)
     BT = (0.2126, 0.7152, 0.0722)
@@ -33,4 +31,4 @@ def luma():
 
     return encodedImg
 
-print(luma())
+#print(luma())
