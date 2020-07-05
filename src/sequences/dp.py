@@ -2,7 +2,7 @@ from blocks import *
 import sys, math
 import time
 
-def minMatchingDP(X,Y):
+def minMatchingDP(X,Y,mu):
 	accumX = []
 	accumY = []
 	minMatch = [[[[],math.inf] for j in range(len(Y))] for i in range(len(X))]
@@ -20,27 +20,27 @@ def minMatchingDP(X,Y):
 	minMatch[0][0] = [[(0,0)],X[0]/Y[0]]
 	for i in range(1,n):
 		minMatch[i][0][0] = minMatch[i-1][0][0] + [(i,0)]
-		minMatch[i][0][1] = accumX[i] / Y[0]
+		minMatch[i][0][1] = abs(accumX[i] / Y[0] - mu)
 	for j in range(1,m):
 		minMatch[0][j][0] = minMatch[0][j-1][0] + [(0,j)]
-		minMatch[0][j][1] = X[0] / accumY[j]
+		minMatch[0][j][1] = abs(X[0] / accumY[j] - mu)
 	
 	for i in range(1,n):
 		for j in range(1,m):
 			for k in range(i):
 				accum = (accumX[i] - accumX[k]) / Y[j]
 				[match, pmin] = minMatch[k][j-1]
-				if(minMatch[i][j][1] > accum + pmin):
+				if(minMatch[i][j][1] > abs(accum + pmin - mu)):
 					tmatch = [(p,j) for p in range(k+1,i+1)]
 					minMatch[i][j][0] = match + tmatch
-					minMatch[i][j][1] = accum + pmin 
+					minMatch[i][j][1] = abs(accum + pmin - mu)
 			for k in range(j):
 				accum = X[i] / (accumY[j] - accumY[k])
 				[match, pmin] = minMatch[i-1][k]
-				if(minMatch[i][j][1] > accum + pmin):
+				if(minMatch[i][j][1] > abs(accum + pmin - mu)):
 					tmatch = [(i,p) for p in range(k+1,j+1)]
 					minMatch[i][j][0] = match + tmatch
-					minMatch[i][j][1] = accum + pmin 
+					minMatch[i][j][1] = abs(accum + pmin - mu)
 	
 	return minMatch[n-1][m-1][0], minMatch[n-1][m-1][1]
 	
