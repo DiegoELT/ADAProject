@@ -14,7 +14,7 @@ def dp_matrix(img1,img2):
         blocksA = getBlocks(A[i],len(A[i]))
         blocksB = getBlocks(B[i],len(B[i]))
 
-        temp1, temp2 = minMatchingDP(blocksA,blocksB)
+        temp1, temp2 = minMatchingDP(blocksA,blocksB,0)
 	
         matchings.append(temp1)
         wTotal += temp2
