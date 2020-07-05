@@ -6,7 +6,7 @@ def luma():
     imgName = input("Image name: ")
     umbral = float(input("Umbral: "))
     type = input("CCIR 601 = c, BT. 709 = b, SMPTE 240M = s: " )
-    
+
     CCIR = (0.299, 0.587, 0.114)
     BT = (0.2126, 0.7152, 0.0722)
     SMPTE = (0.212, 0.701, 0.087)
@@ -33,4 +33,4 @@ def luma():
 
     return encodedImg
 
-print(encodedImg)
+print(luma())
