@@ -10,7 +10,7 @@ from greedy import minMatchingGreedy
 from memoization import minMatchingM
 from recursive import minMatchingR
 
-sampleA = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,1]
+sampleA = [0,1,1,1,0,0,1,0,1,1,0,1,1,0,1,1,1,0,1,0]
 sampleB = [0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0]
 
 def algorithms(argument):

@@ -3,13 +3,15 @@ import sys, math
 import time
 
 minMatch = []
+accumX = []
+accumY = []
 
 def group(X,Y,i,j):
 	Min = math.inf
 	Match = []
 	for k in range(i):
 		tmatch = [(p,j) for p in range(k+1,i+1)]
-		accum = sum(X[k+1:i+1])/Y[j]
+		accum = (accumX[i] - accumX[k]) / Y[j]
 		match, pmin = minMatchingMemoization(X,Y,k,j-1)
 		if(Min > accum+pmin):
 			Min = accum+pmin
@@ -20,7 +22,7 @@ def division(X,Y,i,j):
 	Min = math.inf
 	Match = []
 	for k in range(j):
-		accum = X[i]/sum(Y[k+1:j+1])
+		accum = X[i] / (accumY[j] - accumY[k])
 		match, pmin = minMatchingMemoization(X,Y,i-1,k)
 		if(Min > accum+pmin):
 			tmatch = [(i,p) for p in range(k+1,j+1)]
@@ -38,12 +40,12 @@ def minMatchingMemoization(X,Y,i,j):
 	if(i==0 and j>0):
 		match = [(i,p) for p in range(j+1)]
 		minMatch[i][j][0] = match
-		minMatch[i][j][1] = X[i]/sum(Y[:j+1])
+		minMatch[i][j][1] = X[i] / accumY[j]
 		return minMatch[i][j][0], minMatch[i][j][1]
 	if(i>0 and j==0):
 		match = [(p,j) for p in range(i+1)]
 		minMatch[i][j][0] = match
-		minMatch[i][j][1] = sum(X[:i+1])/Y[j]
+		minMatch[i][j][1] = accumX[i] / Y[j]
 		return minMatch[i][j][0], minMatch[i][j][1]
 	MatchG, MinG = group(X,Y,i,j)
 	MatchD, MinD = division(X,Y,i,j)
@@ -58,7 +60,14 @@ def minMatchingMemoization(X,Y,i,j):
 def minMatchingM(X,Y):
 	global minMatch
 	minMatch = [[[[],math.inf] for s in range(len(Y))] for l in range(len(X))]
+	accumX.append(X[0])
+	accumY.append(Y[0])
+	for i in range(1,len(X)):
+		accumX.append(accumX[i-1] + X[i])
+	for j in range(1,len(Y)):
+		accumY.append(accumY[j-1] + Y[j])
 	return minMatchingMemoization(X,Y,len(X)-1,len(Y)-1)
+	
 '''if(len(sys.argv) > 0):
 	if(sys.argv[1] == '0'):
 		filename_cadena_a = str(input("Cadena A: "))
