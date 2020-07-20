@@ -12,3 +12,15 @@ def getBlocks(A, p):
             X.append(tmp)
     return X
 
+def getBase(A):
+  flag = False # Checking if I am reading ones
+  block_starts = []
+
+  for i in range(len(A)):
+    if (flag == False and A[i] == 1):
+      flag = True
+      block_starts.append(i)
+    elif(flag == True and A[i] == 0):
+      flag = False
+  
+  return block_starts

@@ -2,7 +2,7 @@ import imageio
 
 def luma(imgName):
     #imgName = input("Image name: ")
-    umbral = 100 #float(input("Umbral: "))
+    umbral = 10 #float(input("Umbral: "))
     type = 'c' #input("CCIR 601 = c, BT. 709 = b, SMPTE 240M = s: " )
 
     CCIR = (0.299, 0.587, 0.114)
@@ -30,5 +30,3 @@ def luma(imgName):
         encodedImg.append(tempRow)
 
     return encodedImg
-
-#print(luma())
