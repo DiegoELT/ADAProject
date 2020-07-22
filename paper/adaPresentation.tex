@@ -1,0 +1,47 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usefonttheme{serif}
+
+% Here are the packages I use for equations, code, inserting images, making graphs, and dark mode document, basically.
+
+\usepackage{amsmath}
+\usepackage{listings}
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true
+}
+\usepackage{graphicx}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\title{Analysis of Block Matching Algorithms for Image Transformation}
+\subtitle{ADA Final Project: Questions 5 - 10}
+\author{Alejandro Goicochea\and Diego Linares\and Ariana Villegas}
+\institute{\inst{}Universidad de Ingeniería y Tecnología}
+\date{July 23, 2020}
+
+\begin{document}
+  \frame{\titlepage}
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents
+  \end{frame}
+  \section{Recap of Block Matching}
+  \section{Decoding Images through Luma}
+    \subsection{What is Luma?}
+    \subsection{Transforming into a Matrix of bits}
+  \section{Our Approach}
+    \subsection{Base Process for Transformation}
+    \subsection{Different Algorithms}
+  \section{Examples}
+  \section{Conclusion}
+    \subsection{Algorithm Effectiveness}
+    \subsection{Personal Valoration}
+
+\end{document}
