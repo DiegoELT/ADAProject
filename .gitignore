@@ -1,4 +1,3 @@
-
 # All the hidden files but .gitignore
 .*
 !/.gitignore
@@ -9,3 +8,7 @@
 *.fls
 *.log
 *.synctex.gz
+*.nav
+*.out
+*.snm
+*.toc
