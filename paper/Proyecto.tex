@@ -472,7 +472,116 @@ funciona de la siguiente manera:\\
     \algcost{$c_{27}$}{$1$}
 \end{algorithmic}
 
+\newpage
 \subsection*{Pregunta 5 (Programación Dinámica)}
+
+\noindent La primera diferencia que notamos con el algoritmo memoizado es que es iterativo. El algoritmo 
+funciona de la siguiente manera: Tenemos una matriz de tamaño $n*m$ la cual va a ser llenada mediante se 
+ejecuta el algoritmo. El algoritmo cada vez va añadiendo mas bloques con cada iteración que pasa y decide
+que se va a hacer con este nuevo bloque seleccionado. Con esta decisión se va llenando la matriz para que 
+la decisión pueda ser usada en las siguientes iteraciones. Por esto es que el algoritmo tiene tiempo de 
+ejecución $\Theta(mn^2)$. El código es el siguiente:\\
+\\\textbf{Recibe:} Dos arreglos de bits, X y Y.
+\\\textbf{Devuelve:} El matching de peso mínimo junto con su peso.
+
+\subsubsection*{Algoritmo: Min-Matching-DP}
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{Min-Matching-DP}$(X,Y,mu)$}
+  \algcost{\textit{cost}}{\textit{times}}
+  \STATE $accumX = []$
+    \algcost{$c_1$}{$1$}
+  \STATE $accumY = []$
+    \algcost{$c_2$}{$1$}
+  \STATE $minMatch = [[[[],math.inf]\ for\ j\ in\ range(len(Y))]\ for\ i\ in\ range(len(X))]$\\
+    \algcost{$n*m$}{$1$}
+  \STATE $n = len(X)$
+    \algcost{$c_3$}{$1$}
+  \STATE $m = len(Y)$
+    \algcost{$c_4$}{$1$}
+  \STATE $accumX.append(X[0])$
+    \algcost{$c_5$}{$1$}
+  \STATE $accumY.append(Y[0])$
+    \algcost{$c_6$}{$1$}
+  \FOR{$i=1$ TO n \algcost{$1$}{$n$}}
+    \STATE $accumX.append(accumX[i-1]\ +\ X[i])$
+      \algcost{$c_7$}{$1$}
+  \ENDFOR
+  \FOR{$j=1$ TO m \algcost{$1$}{$m$}}
+  \STATE $accumY.append(accumY[j-1]\ +\ Y[j])$
+    \algcost{$c_7$}{$1$}
+  \ENDFOR
+  \STATE $minMatch[0][0] = [[(0,0)],X[0]/Y[0]]$
+    \algcost{$c_8$}{$1$}
+  \FOR{$i = 1$ TO $n$\algcost{$n$}{$1$}}
+    \STATE $minMatch[i][0][0] = minMatch[i-1][0][0] + [(i,0)]$
+      \algcost{$c_9$}{$1$}
+    \STATE $minMatch[i][0][1] = abs(accumX[i] / Y[0] - mu)$
+      \algcost{$c_{10}$}{$1$} 
+  \ENDFOR
+  \FOR{$j = 1$ TO $m$\algcost{$m$}{$1$}}
+  \STATE $minMatch[0][j][0] = minMatch[0][j-1][0] + [(0,j)]$
+    \algcost{$c_{11}$}{$1$}
+  \STATE $minMatch[0][j][1] = abs(X[0] / accumY[j] - mu)$
+    \algcost{$c_{12}$}{$1$} 
+  \ENDFOR
+  \FOR{$i=1$ TO $n$\algcost{$1$}{$n$}}
+    \FOR{$j=1$ TO $m$\algcost{$1$}{$m$}}
+      \FOR{$k=1$ TO $i$\algcost{$1$}{$i$}}
+        \STATE $accum = (accumX[i] - accumX[k]) / Y[j]$
+          \algcost{$c_{13}$}{$1$}
+        \IF{$minMatch[i][j][1] > abs(accum + pmin - mu))$\algcost{$c_{14}$}{$1$}}
+          \STATE $tmatch = [(p,j)\ for\ p\ in\ range(k+1,i+1)]$
+            \algcost{$i-k$}{$1$}
+          \STATE $minMatch[i][j][0] = match + tmatch$
+            \algcost{$c_{15}$}{$1$}
+          \STATE $minMatch[i][j][1] = abs(accum + pmin - mu)$
+          \algcost{$c_{16}$}{$1$}
+        \ENDIF
+      \ENDFOR
+    \FOR{$k=0$ TO $j$\algcost{$1$}{$j$}}
+      \STATE $accum = X[i] / (accumY[j] - accumY[k])$
+        \algcost{$c_{17}$}{$1$}
+      \STATE $[match, pmin] = minMatch[i-1][k]$
+        \algcost{$c_{18}$}{$1$}
+      \IF{$minMatch[i][j][1] > abs(accum + pmin - mu))$\algcost{$c_{19}$}{$1$}}
+        \STATE $tmatch = [(i,p)\ for\ p\ in\ range(k+1,j+1)]$
+          \algcost{$i-k$}{$1$}
+        \STATE $minMatch[i][j][0] = match + tmatch$
+          \algcost{$c_{20}$}{$1$}
+        \STATE $minMatch[i][j][1] = abs(accum + pmin - mu)$
+        \algcost{$c_{21}$}{$1$}
+      \ENDIF
+    \ENDFOR
+    \ENDFOR
+  \ENDFOR
+  \RETURN{$minMatch[n-1][m-1][0], minMatch[n-1][m-1][1]$}
+    \algcost{$c_{22}$}{$1$}
+  
+\end{algorithmic}
+
+\subsection*{Lectura de imágenes}
+ 
+\noindent En esta parte del proyecto, utilizamos la luminosidad de la imagen para crear la matriz que 
+contiene los bloques de bits. Gracias a la libreria imageio de python, podemos cargar una imagen junto 
+con los valores RGB de cada pixel. Cuando ya tenemos nuestras dos imágenes, podemos utilizar uno de los 
+tres coeficientes de luma disponibles junto con un valor (el umbral) que se pasa a la funcion para ver cuales de los 
+pixeles de las imágenes van a volverse un 0 o 1. Los valores mayores o iguales al umbral se vuelven 1 y el resto 0. 
+Una vez completada nuestra funcion procedemos a aplicar los algoritmos que veremos en la siguiente sección.
+
+\subsection*{Algoritmos de transformación}
+
+\noindent Para las preguntas de transformaciones de imágenes, estos reciben las dos imágenes como 
+parámetros y llaman la funcion luma que devuelve una matriz con los bits correspondientes a cada imagen 
+donde están los bloques. Una vez tenemos ambas matrices, se llaman los algoritmos anteriores por cada fila 
+para sacar un matching por file de toda la imagen. Como se esta trabajando con imágenes del mismo tamaño, 
+el tiempo de ejecución seria el mismo que los algoritmos anteriores multiplicado por la cantidad de 
+filas que tienen las imágenes.\\
+
+\subsection*{}
+
+
+
 
 \subsection*{Link del repositorio}
 \noindent \href{https://www.github.com/DiegoELT/ADAProject}{Github link.}
