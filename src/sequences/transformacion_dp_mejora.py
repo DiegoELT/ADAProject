@@ -1,8 +1,9 @@
 from dp import  *
 from blocks import *
 from luma import *
+from bclass import *
 
-def dp_matrix(img1,img2):
+def dp_matrix(img1,img2, line):
     A = luma(img1)
     B = luma(img2)
 
@@ -10,26 +11,32 @@ def dp_matrix(img1,img2):
     accumB = 0
     wTotal = 0
     matchings =[]
+    block_sizes_A = []
+    block_sizes_B = []
+
+    mb = MatchingBlocks()
     
-    for i in range(len(A)):
-        
-        A[i] = getBlocks(A[i],len(A[i]))
-        B[i] = getBlocks(B[i],len(B[i]))
-        accumA = len(A)
-        accumB = len(B)                
+    blocks_base_A = getBase(A[line])
+    A[line] = getBlocks(A[line],len(A[line]))
+    block_sizes_A.append(A[line])
+    
+    blocks_base_B = getBase(B[line])
+    B[line] = getBlocks(B[line],len(B[line]))
+    block_sizes_B.append(B[line])
+
+    mb.a_blocks_sizes = A[line]
+    mb.b_blocks_sizes = B[line]
+    mb.a_blocks_coordinates = blocks_base_A
+    mb.b_blocks_coordinates = blocks_base_B
+
+    accumA = len(A)
+    accumB = len(B)                
 
     mu = accumA/accumB
 
-    for i in range(len(A)):
+    temp1, temp2 = minMatchingDP(A[line],B[line],mu)
 
-        temp1, temp2 = minMatchingDP(A[i],B[i],mu)
-	
-        matchings.append(temp1)
-        wTotal += temp2
+    matchings.append(temp1)
+    wTotal += temp2
 
-    return matchings, wTotal
-
-match, w = dp_matrix('1.png','4.png')
-
-print(match)
-print(w)
+    return matchings, wTotal, mb

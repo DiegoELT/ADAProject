@@ -37,7 +37,7 @@ super_image = []
 
 for x in range (len(a_sequences)):
   
-  match, w, mb = greedy_matrix(img1, img2, x)
+  match, w, mb = dp_matrix(img1, img2, x)
 
   print(mb.a_blocks_coordinates, " - ", mb.b_blocks_coordinates)
 
