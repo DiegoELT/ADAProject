@@ -47,7 +47,27 @@
     \end{frame}
   \section{Decoding Images through Luma}
     \subsection{What is Luma?}
+      \begin{frame}
+        \frametitle{What is Luma?}
+        Luma represents the relative luminance of an image. It is often used in video engineering.
+        It is calculated with various coefficients, some of which are:
+        \begin{itemize}
+          \item CCIR 601
+          \item BT. 709
+          \item SMPTE 240M
+        \end{itemize}
+        \medskip
+        These are the ones used in our implementation.\\
+      \end{frame}
     \subsection{Transforming into a Matrix of bits}
+      \begin{frame}
+        \frametitle{Transforming into a Matrix of bits}
+        To transform our images into matrices of bits, we will use the result of calculating the luma of 
+        each pixel. What determines if the bit goes to 0 or 1 is another parameter passed to our function.
+        \medskip
+        We repeat this for every pixel of both images, if the luma is equal or greater than our value, 
+        the value is set to 1. Otherwise it is set to 0.
+      \end{frame}
   \section{Our Approach}
     \subsection{Base Process for Transformation}
     \subsection{Different Algorithms}
