@@ -84,6 +84,8 @@ for x in range (len(a_sequences)):
           image_intermediate[j][0] = round((image_intermediate[j][0] + image_b[pixel][0])/2)
           image_intermediate[j][1] = round((image_intermediate[j][1] + image_b[pixel][0])/2)
           image_intermediate[j][2] = round((image_intermediate[j][2] + image_b[pixel][0])/2)
+          PLT.imshow(super_image)
+          PLT.show()
             
   #print("After! ", counter, " modifications.")
   #print(image_intermediate)
