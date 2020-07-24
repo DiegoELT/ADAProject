@@ -35,9 +35,12 @@ print("B matrix size: ", len(b_sequences))
 
 super_image = []
 
+final_weight = 0
+
 for x in range (len(a_sequences)):
   
   match, w, mb = dp_matrix(img1, img2, x)
+  final_weight += w 
 
   print(mb.a_blocks_coordinates, " - ", mb.b_blocks_coordinates)
 
@@ -89,3 +92,5 @@ for x in range (len(a_sequences)):
 
 PLT.imshow(super_image)
 PLT.show()
+
+print("Weight of the whole thing is: ", final_weight)
