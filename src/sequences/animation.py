@@ -39,7 +39,7 @@ final_weight = 0
 
 for x in range (len(a_sequences)):
   
-  match, w, mb = dp_matrix(img1, img2, x)
+  match, w, mb = greedy_matrix(img1, img2, x)
   final_weight += w 
 
   print(mb.a_blocks_coordinates, " - ", mb.b_blocks_coordinates)
@@ -79,8 +79,8 @@ for x in range (len(a_sequences)):
         if (intermediate_matrix_line[i][j].intersects(k)):
           counter += 1
           pixel = math.floor(k.exterior.coords[2][0])
-          if pixel >= 110:
-            pixel = 109
+          if pixel >= (len(a_sequences)):
+            pixel = len(a_sequences)-1
           image_intermediate[j][0] = round((image_intermediate[j][0] + image_b[pixel][0])/2)
           image_intermediate[j][1] = round((image_intermediate[j][1] + image_b[pixel][0])/2)
           image_intermediate[j][2] = round((image_intermediate[j][2] + image_b[pixel][0])/2)
