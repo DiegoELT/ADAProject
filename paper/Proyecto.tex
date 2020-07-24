@@ -38,16 +38,16 @@
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 
 
-\title{Proyecto de ADA - Primer Avance}
+\title{Proyecto de ADA}
 \author{Alejandro Goicochea \and Diego Linares \and Ariana Villegas}
-\date{16 de Junio del 2020}
+\date{23 de Julio del 2020}
 
 \begin{document}
 \maketitle
 
 \section*{Secuencias}
 
-\subsection*{Pregunta 1 (Voraz)}
+\subsection*{Algoritmo Voraz}
 
 \subsubsection*{Algoritmo: Get-Blocks}
 
@@ -186,7 +186,7 @@ max(am,bn)+c &\leq& max(max(a,b)\cdot m, max(a,b)\cdot n)+c \\
 \end{eqnarray*}
 \noindent Entonces por definición, concluimos que $T(n) = O(max(n,m))$
 
-\subsection*{Pregunta 2 (Recurrencia)}
+\subsection*{Recurrencia de Min-Matching}
 
 \noindent Asumimos que:\\
 $X = \textsc{Get-Blocks}(A,p)$ \\
@@ -207,7 +207,7 @@ OPT(i,j)=\left\{
 $M_g(i,j) = min_{k=1}^{i-1}\{\frac{\sum_{p=k+1}^{i}X_p}{Y_j} + OPT(k,j-1)\}$ \\ \\
 $M_d(i,j) = min_{k=1}^{j-1}\{\frac{X_i}{\sum_{p=k+1}^{j}Y_p} + OPT(i-1,k)\}$
 
-\subsection*{Pregunta 3 (Recursivo)}
+\subsection*{Algoritmo recursivo}
 
 \noindent Asumimos que:\\
 $X = \textsc{Get-Blocks}(A,p)$ \\
@@ -397,13 +397,15 @@ $$0\leq 2^{max(i,j)} \leq T_m(i,j) $$
 
 \noindent Entonces por definición, concluimos que $$T(n,m) =  \Omega(2^{max(n,m)})$$
 
-\subsection*{Pregunta 4 (Memoizado)}
+\subsection*{Algoritmo memoizado}
 
 \noindent Los algoritmos para las funciones group y división permanecen igual. La diferencia con el algoritmo 
 recursivo es que almacena los datos ya calculados en una matriz de tamaño $m\ *\ n$ para evitar llamadas que 
 calculen datos que ya sabemos. Dado esto y la definición de nuestra recurrencia en la pregunta 2, esta claro que el 
 algoritmo va a tener tiempo de ejecución $\Theta(n*m)$ ya que es el tiempo que toma llenar toda la matriz. El algoritmo 
 funciona de la siguiente manera:\\
+
+\noindent \textbf{Nota:} En este análisis hemos tomado como constante el tiempo de ejecución de cada llamada a la función. Sin embargo, si consideramos este costo, el tiempo de ejecución es $\Theta(n*m*max(n,m))$. \\
 \\\textbf{Recibe:} Dos arreglos de bits, X y Y con la cantidad de pesos que tienen i y j respectivamente.
 \\\textbf{Devuelve:} El matching de peso mínimo junto con su peso.
 
@@ -472,8 +474,10 @@ funciona de la siguiente manera:\\
     \algcost{$c_{27}$}{$1$}
 \end{algorithmic}
 
+
+
 \newpage
-\subsection*{Pregunta 5 (Programación Dinámica)}
+\subsection*{Algoritmo de programación dinámica}
 
 \noindent La primera diferencia que notamos con el algoritmo memoizado es que es iterativo. El algoritmo 
 funciona de la siguiente manera: Tenemos una matriz de tamaño $n*m$ la cual va a ser llenada mediante se 
@@ -560,6 +564,8 @@ ejecución $\Theta(mn^2)$. El código es el siguiente:\\
   
 \end{algorithmic}
 
+\section*{Transformación de imágenes}
+
 \subsection*{Lectura de imágenes}
  
 \noindent En esta parte del proyecto, utilizamos la luminosidad de la imagen para crear la matriz que 
@@ -578,9 +584,149 @@ para sacar un matching por file de toda la imagen. Como se esta trabajando con i
 el tiempo de ejecución seria el mismo que los algoritmos anteriores multiplicado por la cantidad de 
 filas que tienen las imágenes.\\
 
-\subsection*{}
+\subsection*{Transformación Voraz}
+
+\subsection*{Algoritmo: Greedy Matrix}
+
+\noindent Recibe: Dos matrices de 0s y 1s de tamaño pxq.
+
+\noindent Devuelve: Una transformación mínima. 
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{greedy-matrix}$(A,B)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \STATE total\_weight = 0
+    \algcost{$c_1$}{$1$}
+  \STATE matchings = []
+    \algcost{$c_2$}{$1$}
+  \FOR{$i=1$ TO $q$ \algcost{$c_3$}{$q$}}
+	\STATE blocksA = getBlocks(A[i], len(A[i]))
+	  \algcost{$c_4$}{$p*q$}
+	\STATE blocksB = getBlocks(B[i], len(B[i]))
+	  \algcost{$c_4$}{$p*q$}
+	\STATE line\_matchings, line\_weight = 
+	  \algcost{$c_5$}{$p*q$}
+	\\ minMatchingGreedy(blocksA,blocksB)
+	\STATE matchings.append(line\_matchings)
+	  \algcost{$c_6$}{$q$}
+	\STATE total\_weight += line\_weight
+	  \algcost{$c_7$}{$q$}
+  \ENDFOR 
+  \RETURN matchings, total\_weight
+    \algcost{$c_8$}{$1$}
+
+\end{algorithmic}
+
+\subsubsection*{Tiempo de ejecución}
+
+\begin{eqnarray*}
+T(A,B)&=&c_1+c_2+c_3\cdot q+c_4\cdot 2pq+c_5\cdot pq+c_6\cdot q+c_7\cdot q+c_8\\
+&=&(c_1+c_2+c_8)+c_3\cdot q+(2c_4+c_5)\cdot pq+(c_6+c_7)\cdot q\\
+\end{eqnarray*}
+
+\noindent Entonces, $T(A,B) = O(pq)$
 
 
+\subsection*{Transformación Programación Dinámica}
+
+\subsection*{Algoritmo: DP Matrix}
+
+\noindent Recibe: Dos matrices de 0s y 1s de tamaño pxq.
+
+\noindent Devuelve: Una transformación mínima. 
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{dp-matrix}$(A,B)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \STATE total\_weight = 0
+    \algcost{$c_1$}{$1$}
+  \STATE matchings = []
+    \algcost{$c_2$}{$1$}
+  \FOR{$i=1$ TO $q$ \algcost{$c_3$}{$q$}}
+	\STATE blocksA = getBlocks(A[i], len(A[i]))
+	  \algcost{$c_4$}{$p*q$}
+	\STATE blocksB = getBlocks(B[i], len(B[i]))
+	  \algcost{$c_4$}{$p*q$}
+	\STATE line\_matchings, line\_weight = 
+	  \algcost{$c_5$}{$p^2*q$}
+	\\ minMatchingDP(blocksA,blocksB,0)
+	\STATE matchings.append(line\_matchings)
+	  \algcost{$c_6$}{$q$}
+	\STATE total\_weight += line\_weight
+	  \algcost{$c_7$}{$q$}
+  \ENDFOR 
+  \RETURN matchings, total\_weight
+    \algcost{$c_8$}{$1$}
+
+\end{algorithmic}
+
+\subsubsection*{Tiempo de ejecución}
+
+\begin{eqnarray*}
+T(A,B)&=&c_1+c_2+c_3\cdot q+c_4\cdot 2pq+c_5\cdot p^2q+c_6\cdot q+c_7\cdot q+c_8\\
+&=&(c_1+c_2+c_8)+c_3\cdot q+c_4\cdot 2pq+c_5\cdot p^2q+(c_6+c_7)\cdot q\\
+\end{eqnarray*}
+
+\noindent Entonces, $T(A,B) = O(p^2q)$
+
+
+\subsection*{Transformación Programación Dinámica Mejorada}
+
+\subsection*{Algoritmo: DP Matrix Mejorada}
+
+\noindent Recibe: Dos matrices de 0s y 1s de tamaño pxq.
+
+\noindent Devuelve: Una transformación mínima. 
+
+\begin{algorithmic}[1]
+  \TITLE{\textsc{dp-matrix-mejora}$(A,B)$}
+    \algcost{\textit{cost}}{\textit{times}}
+  \STATE accumA = 0
+    \algcost{$c_1$}{$1$}
+  \STATE accumB = 0
+    \algcost{$c_1$}{$1$}
+  \STATE wTotal = 0
+    \algcost{$c_1$}{$1$}
+  \STATE matchings =[]
+    \algcost{$c_2$}{$1$}
+  \STATE blocksA = []
+    \algcost{$c_2$}{$1$}
+  \STATE blocksB =[]
+    \algcost{$c_2$}{$1$}
+  \FOR{$i=1$ TO $q$ \algcost{$c_3$}{$q$}}
+	\STATE blocksA[i] = getBlocks(A[i], len(A[i]))
+	  \algcost{$c_4$}{$p*q$}
+	\STATE blocksB[i] = getBlocks(B[i], len(B[i]))
+	  \algcost{$c_4$}{$p*q$}
+	\STATE accumA += len(A)
+	  \algcost{$c_5$}{$q$}
+	\STATE accumB += len(B)
+	  \algcost{$c_5$}{$q$}
+  \ENDFOR 
+  \STATE mu = accumA/accumB
+    \algcost{$c_6$}{$1$}
+  \FOR{$i=1$ TO $q$ \algcost{$c_7$}{$q$}}
+	\STATE line\_matchings, line\_weight = 
+	  \algcost{$c_8$}{$p^2*q$}
+	\\ minMatchingDP(blocksA,blocksB,mu)
+	\STATE matchings.append(line\_matchings)
+	  \algcost{$c_9$}{$q$}
+	\STATE total\_weight += line\_weight
+	  \algcost{$c_{10}$}{$q$}
+  \ENDFOR 
+  \RETURN matchings, total\_weight
+    \algcost{$c_{11}$}{$1$}
+
+\end{algorithmic}
+
+\subsubsection*{Tiempo de ejecución}
+
+\begin{eqnarray*}
+T(A,B)&=&3c_1+3c_2+c_3\cdot q+c_4\cdot 2pq+c_5\cdot 2q+c_6+c_7\cdot q+c_8\cdot p^2q+c_9\cdot q+c_{10}\cdot q+c_{11}\\
+&=&(3c_1+3c_2+c_6+c_{11})+(c_3+2c_5+c_7+c_9+c_{10})\cdot q+c_4\cdot 2pq+c_8\cdot p^2q\\
+\end{eqnarray*}
+
+\noindent Entonces, $T(A,B) = O(p^2q)$
 
 
 \subsection*{Link del repositorio}
